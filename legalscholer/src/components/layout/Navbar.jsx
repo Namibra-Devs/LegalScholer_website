@@ -48,7 +48,7 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-1">
-            {["Home", "Features", "Pricing", "Resources"].map((item, index) => (
+            {["Home", "Pricing", ].map((item, index) => (
               <Link
                 key={index}
                 to={`/${item.toLowerCase() === 'home' ? '' : item.toLowerCase()}`}
@@ -60,7 +60,7 @@ export default function Navbar() {
             ))}
             <div className="h-6 w-px bg-[#393E46] mx-2"></div>
             <Link
-              to="/signin"
+              to="/login"
               className="px-4 py-2 text-white/80 text-sm font-medium transition-all duration-300 hover:text-white hover:bg-[#393E46]/40 rounded-lg"
             >
               Sign In
