@@ -140,7 +140,7 @@ export default function Navbar() {
               <Link
                 to="/signup"
                 onClick={() => setMenuOpen(false)}
-                className="mt-4 px-8 py-3.5 bg-[#948979] text-white text-lg font-medium rounded-lg transition-all duration-300 hover:bg-[#948979]/90"
+                className="mt-5 px-8 py-3.5 bg-[#948979] text-white text-lg font-medium rounded-lg transition-all duration-300 hover:bg-[#948979]/90"
               >
                 Get Started
               </Link>

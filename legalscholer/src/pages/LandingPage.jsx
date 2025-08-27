@@ -164,8 +164,10 @@ export default function LandingPage() {
   const hasInput = inputText.length > 0 || isRecording;
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#222831] via-[#393e46] to-slate-900 overflow-hidden">
-      {/* Animated background elements */}
+    <div
+      className="relative min-h-screen bg-cover bg-center overflow-hidden"
+      style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+    >
       <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
       <div className="absolute top-0 left-0 w-72 h-72 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse-slow"></div>
       <div
@@ -246,7 +248,7 @@ export default function LandingPage() {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     placeholder={placeholders[placeholderIndex]}
-                    className="w-full bg-transparent text-white placeholder-white/60 text-base sm:text-lg pl-10 pr-4 py-3 rounded-md focus:outline-none focus:ring-0"
+                    className="w-full bg-transparent text-white placeholder-white/60 text-base sm:text-lg pl-10 pr-4 py-7 rounded-md focus:outline-none focus:ring-0"
                   />
                 </div>
 
@@ -363,10 +365,26 @@ export default function LandingPage() {
           >
             <p>Trusted by legal professionals at top firms worldwide</p>
             <div className="flex justify-center space-x-8 mt-4 opacity-80">
-              <div className="h-8 w-8 bg-blue-500/20 rounded-lg"></div>
-              <div className="h-8 w-8 bg-blue-500/20 rounded-lg"></div>
-              <div className="h-8 w-8 bg-blue-500/20 rounded-lg"></div>
-              <div className="h-8 w-8 bg-blue-500/20 rounded-lg"></div>
+              <img
+                src="/images/firm1.PNG"
+                alt="Firm 1"
+                className="h-10 object-contain bg-white rounded-full p-1"
+              />
+              <img
+                src="/images/firm2.PNG"
+                alt="Firm 2"
+                className="h-10 object-contain bg-white rounded-full p-1"
+              />
+              <img
+                src="/images/firm3.PNG"
+                alt="Firm 3"
+                className="h-10 object-contain bg-white rounded-full p-1"
+              />
+              <img
+                src="/images/firm4.PNG"
+                alt="Firm 4"
+                className="h-10 object-contain bg-white rounded-full p-1"
+              />
             </div>
           </motion.div>
         </div>

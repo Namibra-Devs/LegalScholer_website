@@ -219,7 +219,7 @@ const PricingPage = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="absolute top-6 left-6 w-12 h-12 bg-gradient-to-r from-[#222831] to-[#948979] rounded-full flex items-center justify-center"
+            className="absolute top-6 left-6 w-12 h-12 bg-[#222831] rounded-full flex items-center justify-center"
           >
             <Shield size={24} className="text-white" />
           </motion.div>
@@ -228,7 +228,7 @@ const PricingPage = () => {
           <div className="ml-16">
             {/* Shiny Text Title */}
             <div className="relative inline-block mb-2">
-              <h3 className="text-lg sm:text-xl font-bold text-white bg-gradient-to-r from-[#222831] to-[#948979] p-2">All plans include security guarantees</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-white bg-[#222831] p-2">All plans include security guarantees</h3>
              
             </div>
 
