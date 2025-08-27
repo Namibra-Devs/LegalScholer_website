@@ -109,7 +109,7 @@ const LoginPage = () => {
       <Toaster position="top-right" />
 
       {/* Left Side: Form */}
-      <div className="lg:w-1/2 w-full bg-black flex items-center justify-center p-4 sm:p-8">
+      <div className="lg:w-1/2 w-full min-h-screen bg-black flex items-center justify-center p-4 sm:p-8">
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
