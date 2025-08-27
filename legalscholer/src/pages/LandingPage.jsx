@@ -371,12 +371,12 @@ export default function LandingPage() {
                 className="h-10 object-contain bg-white rounded-full p-1"
               />
               <img
-                src="/images/firm2.PNG"
+                src="/images/firm3.PNG"
                 alt="Firm 2"
                 className="h-10 object-contain bg-white rounded-full p-1"
               />
               <img
-                src="/images/firm3.PNG"
+                src="/images/firm2.PNG"
                 alt="Firm 3"
                 className="h-10 object-contain bg-white rounded-full p-1"
               />

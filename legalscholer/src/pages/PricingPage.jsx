@@ -240,7 +240,7 @@ const PricingPage = () => {
                 transition={{ duration: 0.4, delay: 0.7 }}
                 className="flex items-start"
               >
-                <Zap size={18} className="text-blue-400 mt-0.5 mr-2 flex-shrink-0" />
+                <Zap size={18} className="text-white mt-0.5 mr-2 flex-shrink-0" />
                 <div>
                   <p className="text-white font-medium">99.9% Uptime Guarantee</p>
                   <p className="text-white/70 text-sm">Reliable access when you need it most</p>
@@ -252,7 +252,7 @@ const PricingPage = () => {
                 transition={{ duration: 0.4, delay: 0.8 }}
                 className="flex items-start"
               >
-                <Clock size={18} className="text-blue-400 mt-0.5 mr-2 flex-shrink-0" />
+                <Clock size={18} className="text-white mt-0.5 mr-2 flex-shrink-0" />
                 <div>
                   <p className="text-white font-medium">24/7 Monitoring</p>
                   <p className="text-white/70 text-sm">Continuous security and performance monitoring</p>

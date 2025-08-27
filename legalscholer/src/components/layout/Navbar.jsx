@@ -16,7 +16,12 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const mobileLinks = ["Home", "Pricing", "Sign In"];
+  // ✅ Adjusted routes here so "Sign In" → "/login"
+  const mobileLinks = [
+    { name: "Home", path: "/" },
+    { name: "Pricing", path: "/pricing" },
+    { name: "Sign In", path: "/login" },
+  ];
 
   return (
     <nav
@@ -118,15 +123,11 @@ export default function Navbar() {
                 transition={{ delay: index * 0.3, duration: 0.3 }}
               >
                 <Link
-                  to={`/${
-                    item.toLowerCase().replace(" ", "") === "home"
-                      ? ""
-                      : item.toLowerCase().replace(" ", "")
-                  }`}
+                  to={item.path}
                   onClick={() => setMenuOpen(false)}
                   className="text-2xl font-medium text-white/80 py-6 gap-2.5 px-6 rounded-lg transition-all duration-300 hover:text-white hover:bg-[#393E46]/40"
                 >
-                  {item}
+                  {item.name}
                 </Link>
               </motion.div>
             ))}
