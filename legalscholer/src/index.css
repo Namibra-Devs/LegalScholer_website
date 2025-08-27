@@ -3,7 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional custom styles */
-body {
-  @apply bg-white text-gray-900;
+
+@theme {
+  --animate-shine: shine var(--shine-speed, 6s) ease-in-out infinite;
+}
+
+@keyframes shine {
+  0%   { background-position: 300% 0; }
+  100% { background-position: -300% 0; }
 }

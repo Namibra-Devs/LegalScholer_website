@@ -185,9 +185,9 @@ const PricingPage = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`w-full py-3 rounded-lg font-medium transition-all duration-300 text-white group ${
+                    className={`w-full py-3 rounded-lg font-medium transition-all duration-300 text-white group cursor-pointer ${
                       plan.popular
-                        ? "bg-gradient-to-r from-blue-600 to-cyan-500 hover:bg-gradient-to-r hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg hover:shadow-blue-500/30"
+                        ? " bg-[#222831]/90 hover:bg-[#222831]/10 hover:shadow-lg hover:shadow-blue-500/30"
                         : "bg-white/20 backdrop-blur-md hover:bg-white/30"
                     }`}
                     title={`Choose ${plan.name} Plan`}

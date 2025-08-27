@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import ShinyText from "../ShinyText";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +28,7 @@ export default function Navbar() {
       <div
         className={`transition-all duration-300 ${
           scrolled
-            ? "backdrop-blur-xl bg-[#222831]/90 shadow-lg border border-[#393E46]/30 rounded-xl mx-4"
+            ? "backdrop-blur-xl bg-[#222831]/90 shadow-lg  rounded-xl mx-4"
             : "bg-transparent"
         }`}
       >
@@ -42,16 +43,21 @@ export default function Navbar() {
               />
             </div>
             <span className="font-bold text-white text-xl tracking-tight hidden md:block">
-              LegalScholer
+              <ShinyText
+                text="LegalScholer"
+                disabled={false}
+                speed={3}
+                className="custom-class"
+              />
             </span>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-1">
-            {["Home", "Pricing", ].map((item, index) => (
+            {["Home", "Pricing"].map((item, index) => (
               <Link
                 key={index}
-                to={`/${item.toLowerCase() === 'home' ? '' : item.toLowerCase()}`}
+                to={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
                 className="relative text-white/80 text-sm font-medium transition-all duration-300 group px-4 py-2 rounded-lg hover:text-white hover:bg-[#393E46]/40"
               >
                 {item}
@@ -112,7 +118,11 @@ export default function Navbar() {
                 transition={{ delay: index * 0.3, duration: 0.3 }}
               >
                 <Link
-                  to={`/${item.toLowerCase().replace(" ", "") === "home" ? "" : item.toLowerCase().replace(" ", "")}`}
+                  to={`/${
+                    item.toLowerCase().replace(" ", "") === "home"
+                      ? ""
+                      : item.toLowerCase().replace(" ", "")
+                  }`}
                   onClick={() => setMenuOpen(false)}
                   className="text-2xl font-medium text-white/80 py-6 gap-2.5 px-6 rounded-lg transition-all duration-300 hover:text-white hover:bg-[#393E46]/40"
                 >
