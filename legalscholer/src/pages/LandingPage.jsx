@@ -12,6 +12,7 @@ import {
   Brain,
   ChevronRight,
   X,
+  File,
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -27,8 +28,10 @@ export default function LandingPage() {
   const [imageUploadStatus, setImageUploadStatus] = useState("processing");
   const [imageLoadingTextIndex, setImageLoadingTextIndex] = useState(0);
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const borderRef = useRef(null);
   const fileInputRef = useRef(null);
+  const dropZoneRef = useRef(null);
 
   const placeholders = [
     "Search for legal cases...",
@@ -55,7 +58,7 @@ export default function LandingPage() {
   ];
 
   const imageLoadingTexts = [
-    "Uploading image...",
+    "Uploading file...",
     "Extracting text from document...",
     "Identifying legal concepts...",
     "Analyzing document structure...",
@@ -131,6 +134,42 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Drag and drop event handlers
+  useEffect(() => {
+    const dropZone = dropZoneRef.current;
+    if (!dropZone) return;
+
+    const handleDragOver = (e) => {
+      e.preventDefault();
+      setIsDragOver(true);
+    };
+
+    const handleDragLeave = (e) => {
+      e.preventDefault();
+      setIsDragOver(false);
+    };
+
+    const handleDrop = (e) => {
+      e.preventDefault();
+      setIsDragOver(false);
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0 && !isImageUploading) {
+        handleFileProcess(files[0]);
+      }
+    };
+
+    dropZone.addEventListener('dragover', handleDragOver);
+    dropZone.addEventListener('dragleave', handleDragLeave);
+    dropZone.addEventListener('drop', handleDrop);
+
+    return () => {
+      dropZone.removeEventListener('dragover', handleDragOver);
+      dropZone.removeEventListener('dragleave', handleDragLeave);
+      dropZone.removeEventListener('drop', handleDrop);
+    };
+  }, [isImageUploading]);
+
   // Animate border line
   useEffect(() => {
     if (!borderRef.current) return;
@@ -166,22 +205,12 @@ export default function LandingPage() {
     };
   }, [isFocused]);
 
-  // Handle image upload
-  const handleImageClick = () => {
-    if (!isImageUploading) {
-      fileInputRef.current?.click();
-    }
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
+  // Handle file processing
+  const handleFileProcess = (file) => {
     if (file && !isImageUploading) {
       setIsImageUploading(true);
       setShowImageModal(true);
       setImageUploadStatus("processing");
-      
-      // Reset file input
-      e.target.value = '';
       
       // Simulate processing for 6 seconds
       setTimeout(() => {
@@ -194,6 +223,23 @@ export default function LandingPage() {
           setIsImageUploading(false);
         }, 3000);
       }, 6000);
+    }
+  };
+
+  // Handle image upload button click
+  const handleImageClick = () => {
+    if (!isImageUploading) {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      handleFileProcess(file);
+      
+      // Reset file input
+      e.target.value = '';
     }
   };
 
@@ -225,6 +271,7 @@ export default function LandingPage() {
     <div
       className="relative min-h-screen bg-cover bg-center overflow-hidden"
       style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+      ref={dropZoneRef}
     >
       <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
       <div className="absolute top-0 left-0 w-72 h-72 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse-slow"></div>
@@ -232,6 +279,33 @@ export default function LandingPage() {
         className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full filter blur-3xl animate-pulse-slow"
         style={{ animationDelay: "2s" }}
       ></div>
+
+      {/* Drag Overlay */}
+      <AnimatePresence>
+        {isDragOver && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-blue-500/20 backdrop-blur-md flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-800/90 backdrop-blur-lg rounded-xl p-8 max-w-md w-full border-2 border-dashed border-blue-400 text-center"
+            >
+              <File className="w-16 h-16 text-blue-400 mx-auto mb-4" />
+              <h3 className="text-white text-xl font-semibold mb-2">
+                Drop file to upload
+              </h3>
+              <p className="text-white/70">
+                Upload any document for legal analysis
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-20 mt-25">
         <div className="flex flex-col items-center justify-center text-center min-h-[80vh] px-4 sm:px-6">
@@ -310,19 +384,18 @@ export default function LandingPage() {
                   />
                 </div>
 
-                {/* Icons: Image, Voice */}
+                {/* Icons: File, Voice */}
                 <div className="flex items-center gap-2 sm:gap-3">
                   <input
                     type="file"
                     ref={fileInputRef}
-                    accept="image/*"
                     className="hidden"
                     onChange={handleFileSelect}
                     disabled={isImageUploading}
                   />
                   <motion.button
                     type="button"
-                    title={isImageUploading ? "Processing image..." : "Upload Image"}
+                    title={isImageUploading ? "Processing file..." : "Upload File"}
                     onClick={handleImageClick}
                     className={`p-2 sm:p-3 backdrop-blur-md rounded-full transition-all duration-300 ${
                       isImageUploading
@@ -336,7 +409,7 @@ export default function LandingPage() {
                     {isImageUploading ? (
                       <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-spin" />
                     ) : (
-                      <Image className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      <File className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     )}
                   </motion.button>
                   <motion.button
@@ -466,7 +539,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Image Upload Modal */}
+      {/* File Upload Modal */}
       <AnimatePresence>
         {showImageModal && (
           <motion.div
@@ -484,7 +557,7 @@ export default function LandingPage() {
             >
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-white text-lg font-semibold">
-                  {imageUploadStatus === "processing" ? "Processing Image" : "Upload Error"}
+                  {imageUploadStatus === "processing" ? "Processing File" : "Upload Error"}
                 </h3>
                 <button
                   onClick={() => {
