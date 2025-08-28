@@ -11,6 +11,7 @@ import {
   Scale,
   Brain,
   ChevronRight,
+  X,
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -22,7 +23,12 @@ export default function LandingPage() {
   const [randomSubtitle, setRandomSubtitle] = useState("");
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [imageUploadStatus, setImageUploadStatus] = useState("processing");
+  const [imageLoadingTextIndex, setImageLoadingTextIndex] = useState(0);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const borderRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const placeholders = [
     "Search for legal cases...",
@@ -46,6 +52,15 @@ export default function LandingPage() {
     "Generating insights...",
     "Compiling relevant precedents...",
     "Almost done...",
+  ];
+
+  const imageLoadingTexts = [
+    "Uploading image...",
+    "Extracting text from document...",
+    "Identifying legal concepts...",
+    "Analyzing document structure...",
+    "Cross-referencing with case law...",
+    "Finalizing analysis...",
   ];
 
   const features = [
@@ -97,6 +112,17 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, [isLoading]);
 
+  // Rotate image loading texts when uploading
+  useEffect(() => {
+    let interval;
+    if (isImageUploading) {
+      interval = setInterval(() => {
+        setImageLoadingTextIndex((prev) => (prev + 1) % imageLoadingTexts.length);
+      }, 1500);
+    }
+    return () => clearInterval(interval);
+  }, [isImageUploading]);
+
   // Rotate features
   useEffect(() => {
     const interval = setInterval(() => {
@@ -139,6 +165,38 @@ export default function LandingPage() {
       if (animation) clearInterval(animation);
     };
   }, [isFocused]);
+
+  // Handle image upload
+  const handleImageClick = () => {
+    if (!isImageUploading) {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file && !isImageUploading) {
+      setIsImageUploading(true);
+      setShowImageModal(true);
+      setImageUploadStatus("processing");
+      
+      // Reset file input
+      e.target.value = '';
+      
+      // Simulate processing for 6 seconds
+      setTimeout(() => {
+        setImageUploadStatus("error");
+        
+        // Close modal after 3 seconds
+        setTimeout(() => {
+          setShowImageModal(false);
+          setImageUploadStatus("processing");
+          setIsImageUploading(false);
+        }, 3000);
+      }, 6000);
+    }
+  };
+
   // Simulate voice recording
   const handleVoiceClick = () => {
     setIsRecording(true);
@@ -248,20 +306,38 @@ export default function LandingPage() {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     placeholder={placeholders[placeholderIndex]}
-                    className="w-full bg-transparent text-white placeholder-white/60 text-base sm:text-lg pl-10 pr-4 py-7 rounded-md focus:outline-none focus:ring-0"
+                    className="w-full bg-transparent text-white placeholder-white/60 text-base sm:text-lg pl-10 pr-4 py-12 rounded-md focus:outline-none focus:ring-0"
                   />
                 </div>
 
                 {/* Icons: Image, Voice */}
                 <div className="flex items-center gap-2 sm:gap-3">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileSelect}
+                    disabled={isImageUploading}
+                  />
                   <motion.button
                     type="button"
-                    title="Upload Image"
-                    className="p-2 sm:p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full transition-all duration-300"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    title={isImageUploading ? "Processing image..." : "Upload Image"}
+                    onClick={handleImageClick}
+                    className={`p-2 sm:p-3 backdrop-blur-md rounded-full transition-all duration-300 ${
+                      isImageUploading
+                        ? "bg-blue-500/30 cursor-not-allowed"
+                        : "bg-white/10 hover:bg-white/20"
+                    }`}
+                    whileHover={!isImageUploading ? { scale: 1.1 } : {}}
+                    whileTap={!isImageUploading ? { scale: 0.95 } : {}}
+                    disabled={isImageUploading}
                   >
-                    <Image className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    {isImageUploading ? (
+                      <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-spin" />
+                    ) : (
+                      <Image className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    )}
                   </motion.button>
                   <motion.button
                     type="button"
@@ -389,6 +465,67 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Image Upload Modal */}
+      <AnimatePresence>
+        {showImageModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 20 }}
+              className="bg-slate-800/90 backdrop-blur-lg rounded-xl p-6 max-w-md w-full border border-white/10 shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-white text-lg font-semibold">
+                  {imageUploadStatus === "processing" ? "Processing Image" : "Upload Error"}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowImageModal(false);
+                    setIsImageUploading(false);
+                  }}
+                  className="text-white/60 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center justify-center py-6">
+                {imageUploadStatus === "processing" ? (
+                  <>
+                    <Loader2 className="w-12 h-12 text-blue-400 animate-spin mb-4" />
+                    <div className="text-white text-center">
+                      <p className="font-medium mb-2">{imageLoadingTexts[imageLoadingTextIndex]}</p>
+                      <p className="text-sm text-white/70 mt-2">
+                        This may take a few moments...
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
+                      <X className="w-8 h-8 text-red-400" />
+                    </div>
+                    <div className="text-white text-center">
+                      <p className="font-medium mb-2">Backend is not connected.</p>
+                      <p className="text-sm text-white/70">
+                        Please try again later or contact support.
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Animated background circles */}
       <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full animate-float"></div>
